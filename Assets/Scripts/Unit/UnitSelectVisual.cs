@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class UnitSelectVisual : MonoBehaviour
 {
-    private UnitBehaviour unitBehaviour;
+    private Unit _unit;
     private MeshRenderer meshRenderer;
 
     private void Awake()
     {
-        unitBehaviour = GetComponentInParent<UnitBehaviour>();
+        _unit = GetComponentInParent<Unit>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
@@ -20,7 +20,7 @@ public class UnitSelectVisual : MonoBehaviour
 
     private void UnitActionSelected_OnSelectedUnitChanged(object sender, EventArgs empty)
     {
-        if (UnitActionSelection.instance.GetSelectedUnit() == unitBehaviour)
+        if (UnitActionSelection.instance.GetSelectedUnit() == _unit)
         {
             meshRenderer.enabled = true;
         }

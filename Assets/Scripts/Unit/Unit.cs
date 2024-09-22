@@ -2,21 +2,28 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 
-public class UnitBehaviour : MonoBehaviour
+public class Unit : MonoBehaviour
 {
     private Animator animator;
     
     private Vector3 targetPosition;
+    private GridPosition gridPosition;
     
     [Header("Movement Variables")]
     [SerializeField] private float movementSpeed = 4f;
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private float reachTargetAcceptance = 0.01f;
 
-    private void Start()
+    private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         targetPosition = transform.position;
+    }
+
+    private void Start()
+    {
+        gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        LevelGrid.instance.AddUnitAtGridPosition(gridPosition, this);
     }
 
     private void Update()
@@ -50,6 +57,12 @@ public class UnitBehaviour : MonoBehaviour
             animator.SetBool("IsWalking", false);
         }
         
+        GridPosition newGridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        if (newGridPosition != gridPosition)
+        {
+            LevelGrid.instance.UnitMovedGridPosition(this, gridPosition, newGridPosition);
+            gridPosition = newGridPosition;
+        }
         
     }
 }

@@ -7,7 +7,7 @@ public class UnitActionSelection : MonoBehaviour
     
     public event EventHandler ON_SELECTED_UNIT_CHANGED;
     
-    private UnitBehaviour selectedUnit;
+    private Unit selectedUnit;
 
     [SerializeField] private LayerMask unitsLayer;
 
@@ -42,14 +42,14 @@ public class UnitActionSelection : MonoBehaviour
         Ray cameraHitRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(cameraHitRay, out hit, float.MaxValue, unitsLayer))
         {
-            if (hit.collider.gameObject.TryGetComponent<UnitBehaviour>(out UnitBehaviour clickedOnUnit))
+            if (hit.collider.gameObject.TryGetComponent<Unit>(out Unit clickedOnUnit))
             {
                 SetSelectedUnit(clickedOnUnit);
             }
         }
     }
 
-    private void SetSelectedUnit(UnitBehaviour clickedOnUnit)
+    private void SetSelectedUnit(Unit clickedOnUnit)
     {
         selectedUnit = clickedOnUnit;
 
@@ -59,7 +59,7 @@ public class UnitActionSelection : MonoBehaviour
         }
     }
 
-    public UnitBehaviour GetSelectedUnit()
+    public Unit GetSelectedUnit()
     {
         return selectedUnit;
     }
