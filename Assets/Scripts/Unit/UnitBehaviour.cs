@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitBehaviour : MonoBehaviour
 {
     private Animator animator;
+    
     private Vector3 targetPosition;
     
     [Header("Movement Variables")]
@@ -15,6 +16,7 @@ public class UnitBehaviour : MonoBehaviour
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        targetPosition = transform.position;
     }
 
     private void Update()
@@ -22,7 +24,7 @@ public class UnitBehaviour : MonoBehaviour
         HandleMovement();
     }
 
-    private void MoveToPosition(Vector3 targetPosition)
+    public void MoveToPosition(Vector3 targetPosition)
     {
         this.targetPosition = targetPosition;
        
@@ -30,11 +32,6 @@ public class UnitBehaviour : MonoBehaviour
 
     private void HandleMovement()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            MoveToPosition(MouseWorld.GetMouseHitPosition());
-        }
         
         float distanceToTargetPosition = Vector3.Distance(transform.position, targetPosition);
 
