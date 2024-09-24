@@ -15,12 +15,12 @@ public class UnitSelectVisual : MonoBehaviour
     private void Start()
     {
         meshRenderer.enabled = false;
-        UnitActionSelection.instance.ON_SELECTED_UNIT_CHANGED += UnitActionSelected_OnSelectedUnitChanged;
+        UnitActionSystem.instance.ON_SELECTED_UNIT_CHANGED += UnitActionSelected_OnSelectedUnitChanged;
     }
 
     private void UnitActionSelected_OnSelectedUnitChanged(object sender, EventArgs empty)
     {
-        if (UnitActionSelection.instance.GetSelectedUnit() == _unit)
+        if (UnitActionSystem.instance.GetSelectedUnit() == _unit)
         {
             meshRenderer.enabled = true;
         }

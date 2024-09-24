@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
 
-public class UnitActionSelection : MonoBehaviour
+public class UnitActionSystem : MonoBehaviour
 {
-    public static UnitActionSelection instance { get; private set; }
+    public static UnitActionSystem instance { get; private set; }
     
     public event EventHandler ON_SELECTED_UNIT_CHANGED;
     
     private Unit selectedUnit;
+
+    private bool isActionRunning;
 
     [SerializeField] private LayerMask unitsLayer;
 
@@ -25,6 +27,11 @@ public class UnitActionSelection : MonoBehaviour
 
     private void Update()
     {
+        if (isActionRunning)
+        {
+            return;
+        }
+        
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             HandleUnitSelection();
@@ -32,8 +39,30 @@ public class UnitActionSelection : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit)
         {
-            selectedUnit.MoveToPosition(MouseWorld.GetMouseHitPosition());
+            SetActionRunning();
+            GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetMouseHitPosition());
+
+            if (selectedUnit.GetMoveAction().IsValidfActionGridPosition(mouseGridPosition))
+            {
+                selectedUnit.GetMoveAction().MoveToPosition(mouseGridPosition, ClearActionRunning);
+            }
         }
+
+        if (Input.GetKeyDown(KeyCode.F) && selectedUnit)
+        {
+            SetActionRunning();
+            selectedUnit.GetSpinAction().Spin(ClearActionRunning);
+        }
+    }
+
+    private void SetActionRunning()
+    {
+        isActionRunning = true;
+    }
+
+    private void ClearActionRunning()
+    {
+        isActionRunning = false;
     }
 
     private void HandleUnitSelection()
