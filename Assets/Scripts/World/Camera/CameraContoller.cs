@@ -64,11 +64,11 @@ public class CameraContoller : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Q))
         {
-            inputRotateVector.y = -1;
+            inputRotateVector.y = 1;
         }
         if (Input.GetKey(KeyCode.E))
         {
-            inputRotateVector.y = 1;
+            inputRotateVector.y = -1;
         }
 
         transform.eulerAngles += inputRotateVector * cameraRotationSpeed * Time.deltaTime;
