@@ -8,6 +8,7 @@ public class UnitActionSystem : MonoBehaviour
 
     public event EventHandler ON_SELECTED_UNIT_CHANGED;
     public event EventHandler ON_SELECTED_ACTION_CHANGED;
+    public event EventHandler ON_ACTION_STARTED;
     public event EventHandler ON_ACTION_RUNNING;
     public event EventHandler ON_ACTION_CLEAR;
     
@@ -64,8 +65,15 @@ public class UnitActionSystem : MonoBehaviour
 
             if (selectedAction.IsValidActionGridPosition(mouseGridPosition))
             {
-                SetActionRunning();
-                selectedAction.TakeAction(mouseGridPosition, ClearActionRunning);
+                if (selectedUnit.TrySpendActionPointToTakeAction(selectedAction))
+                {
+                    SetActionRunning();
+                    selectedAction.TakeAction(mouseGridPosition, ClearActionRunning);
+                    if (ON_ACTION_STARTED != null)
+                    {
+                        ON_ACTION_STARTED(this, EventArgs.Empty);
+                    }
+                }
             }
         }
     }

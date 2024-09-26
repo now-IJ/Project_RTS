@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UnitActionSystemUI : MonoBehaviour
 {
    [SerializeField] private GameObject actionButtonPrefab;
    [SerializeField] private Transform actionButtonContainer;
+   [SerializeField] private TextMeshProUGUI actionPointsText;
 
    private List<ActionButtonUI> actionButtonUIList;
 
@@ -18,6 +20,9 @@ public class UnitActionSystemUI : MonoBehaviour
    {
       UnitActionSystem.instance.ON_SELECTED_UNIT_CHANGED += UnitActionSystem_OnSelectedUnitChanged;
       UnitActionSystem.instance.ON_SELECTED_ACTION_CHANGED += UnitActionSystem_OnSelectedActionChanged;
+      UnitActionSystem.instance.ON_ACTION_STARTED += UnitActionSystem_OnActionStarted;
+      TurnSystem.instance.ON_TURN_CHANGED += TurnSystem_OnTurnChanged;
+      Unit.ON_ANY_ACTION_POINTS_CHANGED += Unit_OnAnyActionPointsChanged;
       UpdateSelectedVisual();
    }
 
@@ -45,6 +50,7 @@ public class UnitActionSystemUI : MonoBehaviour
    {
       CreateUnitActionButtons();
       UpdateSelectedVisual();
+      UpdateActionPoints();
    }
 
    private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
@@ -52,11 +58,33 @@ public class UnitActionSystemUI : MonoBehaviour
       UpdateSelectedVisual();
    }
 
+   private void UnitActionSystem_OnActionStarted(object sender, EventArgs e)
+   {
+      UpdateActionPoints();
+   }
+
+   private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
+   {
+      UpdateActionPoints();
+   }
+
+   private void Unit_OnAnyActionPointsChanged(object sender, EventArgs e)
+   {
+      UpdateActionPoints();
+   }
+   
    private void UpdateSelectedVisual()
    {
       foreach (ActionButtonUI actionButtonUI in actionButtonUIList)
       {
          actionButtonUI.UpdateSelectedVisual();
       }
+   }
+
+   private void UpdateActionPoints()
+   {
+      Unit selectedUnit = UnitActionSystem.instance.GetSelectedUnit();
+      
+      actionPointsText.text = "Action Points: " + selectedUnit.GetActionPoints();
    }
 }
