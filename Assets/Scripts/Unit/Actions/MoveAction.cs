@@ -7,10 +7,11 @@ namespace RS
 {
     public class MoveAction : BaseAction
     {
-        private Animator animator;
-
         private Vector3 targetPosition;
 
+        public event EventHandler ON_START_MOVING; 
+        public event EventHandler ON_STOP_MOVING; 
+        
         [Header("Movement Variables")] [SerializeField]
         private float movementSpeed = 4f;
 
@@ -21,7 +22,6 @@ namespace RS
         protected override void Awake()
         {
             base.Awake();
-            animator = GetComponentInChildren<Animator>();
             targetPosition = transform.position;
         }
 
@@ -43,11 +43,13 @@ namespace RS
             {
                 moveDirection.Normalize();
                 transform.position += moveDirection * movementSpeed * Time.deltaTime;
-                animator.SetBool("IsWalking", true);
             }
             else
             {
-                animator.SetBool("IsWalking", false);
+                if (ON_STOP_MOVING != null)
+                {
+                    ON_STOP_MOVING(this, EventArgs.Empty);
+                }
                 ActionComplete();
             }
 
@@ -58,6 +60,10 @@ namespace RS
         {
             ActionStart(OnActionComplete);
             this.targetPosition = LevelGrid.instance.GetWorldPosition(gridPosition);
+            if (ON_START_MOVING != null)
+            {
+                ON_START_MOVING(this, EventArgs.Empty);
+            }
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()

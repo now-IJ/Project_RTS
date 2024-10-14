@@ -12,6 +12,8 @@ namespace RS
             Shooting,
             Finish,
         }
+
+        public event EventHandler ON_SHOOT;
         
         private int maxShootDistance = 7;
         private State state;
@@ -77,6 +79,10 @@ namespace RS
 
         private void Shoot()
         {
+            if (ON_SHOOT != null)
+            {
+                ON_SHOOT(this, EventArgs.Empty);
+            }
             targetUnit.Damage();
         }
         
