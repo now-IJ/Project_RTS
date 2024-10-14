@@ -1,22 +1,25 @@
 using System;
 using UnityEngine;
 
-public class GridSystemVisualSingle : MonoBehaviour
+namespace RS
 {
-    private MeshRenderer meshRenderer;
-
-    private void Awake()
+    public class GridSystemVisualSingle : MonoBehaviour
     {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-    }
+        private MeshRenderer meshRenderer;
 
-    public void Show()
-    {
-        meshRenderer.enabled = true;
-    }
+        private void Awake()
+        {
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
+        }
 
-    public void Hide()
-    {
-        meshRenderer.enabled = false;
+        public void Show()
+        {
+            meshRenderer.enabled = true;
+        }
+
+        public void Hide()
+        {
+            meshRenderer.enabled = false;
+        }
     }
 }

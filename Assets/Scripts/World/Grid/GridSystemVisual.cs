@@ -4,71 +4,74 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class GridSystemVisual : MonoBehaviour
+namespace RS
 {
-    public static GridSystemVisual instance;
-    
-    [SerializeField] private GameObject gridSystemVisualPrefab;
-
-    private GridSystemVisualSingle[,] gridSystemVisualSinglesArray;
-
-    private void Awake()
+    public class GridSystemVisual : MonoBehaviour
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        public static GridSystemVisual instance;
 
-    private void Start()
-    {
-        gridSystemVisualSinglesArray =
-            new GridSystemVisualSingle[LevelGrid.instance.GetWidth(), LevelGrid.instance.GetHeight()];
-        
-        for (int x = 0 ;x < LevelGrid.instance.GetWidth(); x++)
+        [SerializeField] private GameObject gridSystemVisualPrefab;
+
+        private GridSystemVisualSingle[,] gridSystemVisualSinglesArray;
+
+        private void Awake()
         {
-            for (int z = 0; z < LevelGrid.instance.GetHeight(); z++)
+            if (instance == null)
             {
-                GridPosition gridPosition = new GridPosition(x, z);
-
-                GameObject gridSystemVisualSingleObject = Instantiate(gridSystemVisualPrefab,
-                    LevelGrid.instance.GetWorldPosition(gridPosition), quaternion.identity);
-
-                gridSystemVisualSinglesArray[x, z] =
-                    gridSystemVisualSingleObject.GetComponent<GridSystemVisualSingle>();
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
-    }
 
-    private void Update()
-    {
-        UpdateGridVisual();
-    }
-
-    public void HideAllGridPositions()
-    {
-        foreach (GridSystemVisualSingle gridSystemVisual in gridSystemVisualSinglesArray)
+        private void Start()
         {
-            gridSystemVisual.Hide();
-        }
-    }
+            gridSystemVisualSinglesArray =
+                new GridSystemVisualSingle[LevelGrid.instance.GetWidth(), LevelGrid.instance.GetHeight()];
 
-    public void ShowGridPositionList(List<GridPosition> gridPositions)
-    {
-        foreach (GridPosition gridPosition in gridPositions)
+            for (int x = 0; x < LevelGrid.instance.GetWidth(); x++)
+            {
+                for (int z = 0; z < LevelGrid.instance.GetHeight(); z++)
+                {
+                    GridPosition gridPosition = new GridPosition(x, z);
+
+                    GameObject gridSystemVisualSingleObject = Instantiate(gridSystemVisualPrefab,
+                        LevelGrid.instance.GetWorldPosition(gridPosition), quaternion.identity);
+
+                    gridSystemVisualSinglesArray[x, z] =
+                        gridSystemVisualSingleObject.GetComponent<GridSystemVisualSingle>();
+                }
+            }
+        }
+
+        private void Update()
         {
-            gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].Show();
+            UpdateGridVisual();
         }
-    }
 
-    private void UpdateGridVisual()
-    {
-        HideAllGridPositions();
-        BaseAction selectedAction = UnitActionSystem.instance.GetSelecetedAction();
-        ShowGridPositionList(selectedAction.GetValidActionGridPositionList());
+        public void HideAllGridPositions()
+        {
+            foreach (GridSystemVisualSingle gridSystemVisual in gridSystemVisualSinglesArray)
+            {
+                gridSystemVisual.Hide();
+            }
+        }
+
+        public void ShowGridPositionList(List<GridPosition> gridPositions)
+        {
+            foreach (GridPosition gridPosition in gridPositions)
+            {
+                gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].Show();
+            }
+        }
+
+        private void UpdateGridVisual()
+        {
+            HideAllGridPositions();
+            BaseAction selectedAction = UnitActionSystem.instance.GetSelecetedAction();
+            ShowGridPositionList(selectedAction.GetValidActionGridPositionList());
+        }
     }
 }

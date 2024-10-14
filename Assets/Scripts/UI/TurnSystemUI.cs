@@ -4,31 +4,46 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class TurnSystemUI : MonoBehaviour
+namespace RS
 {
-    [SerializeField] private TextMeshProUGUI turnText;
-    [SerializeField] private Button nextTurnButton;
-
-    private void Start()
+    public class TurnSystemUI : MonoBehaviour
     {
-        nextTurnButton.onClick.AddListener(() =>
+        [SerializeField] private TextMeshProUGUI turnText;
+        [SerializeField] private Button nextTurnButton;
+        [SerializeField] private GameObject enemyTurnBanner;
+
+        private void Start()
         {
-            TurnSystem.instance.NextTurn();
-        });
+            nextTurnButton.onClick.AddListener(() => { TurnSystem.instance.NextTurn(); });
 
-        TurnSystem.instance.ON_TURN_CHANGED += TurnSystem_OnTurnChanged;
-        
-        UpdateTurnText();
-    }
+            TurnSystem.instance.ON_TURN_CHANGED += TurnSystem_OnTurnChanged;
 
-    private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
-    {
-        UpdateTurnText();
-    }
-    
-    private void UpdateTurnText()
-    {
-        turnText.text = "Turn " + TurnSystem.instance.GetTurnNumber();
+            UpdateTurnText();
+            UpdateEnemyTurnBanner();
+            UpdateNextTurnButtonVisibility();
+        }
+
+        private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
+        {
+            UpdateTurnText();
+            UpdateEnemyTurnBanner();
+            UpdateNextTurnButtonVisibility();
+        }
+
+        private void UpdateTurnText()
+        {
+            turnText.text = "Turn " + TurnSystem.instance.GetTurnNumber();
+        }
+
+        private void UpdateEnemyTurnBanner()
+        {
+            enemyTurnBanner.SetActive(!TurnSystem.instance.IsPLayerTurn());
+        }
+
+        private void UpdateNextTurnButtonVisibility()
+        {
+            nextTurnButton.gameObject.SetActive(TurnSystem.instance.IsPLayerTurn());
+        }
     }
 }
     

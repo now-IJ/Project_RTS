@@ -1,38 +1,48 @@
 using System;
 using UnityEngine;
 
-public class TurnSystem : MonoBehaviour
+namespace RS
 {
-    public static TurnSystem instance { get; private set; }
-    
-    public event EventHandler ON_TURN_CHANGED;
-
-    private int turnNumber = 1;
-
-    private void Awake()
+    public class TurnSystem : MonoBehaviour
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        public static TurnSystem instance { get; private set; }
 
-    public void NextTurn()
-    {
-        turnNumber++;
+        public event EventHandler ON_TURN_CHANGED;
 
-        if (ON_TURN_CHANGED != null)
+        private int turnNumber = 1;
+        private bool isPlayerTurn = true;
+
+        private void Awake()
         {
-            ON_TURN_CHANGED(this, EventArgs.Empty);
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-    }
 
-    public int GetTurnNumber()
-    {
-        return turnNumber;
+        public void NextTurn()
+        {
+            turnNumber++;
+            isPlayerTurn = !isPlayerTurn;
+            
+            if (ON_TURN_CHANGED != null)
+            {
+                ON_TURN_CHANGED(this, EventArgs.Empty);
+            }
+        }
+
+        public int GetTurnNumber()
+        {
+            return turnNumber;
+        }
+
+        public bool IsPLayerTurn()
+        {
+            return isPlayerTurn;
+        }
     }
 }
