@@ -13,7 +13,13 @@ namespace RS
             Finish,
         }
 
-        public event EventHandler ON_SHOOT;
+        public event EventHandler<OnShootEventArgs> ON_SHOOT;
+
+        public class OnShootEventArgs : EventArgs
+        {
+            public Unit targetUnit;
+            public Unit shootingUnit;
+        }
         
         private int maxShootDistance = 7;
         private State state;
@@ -81,7 +87,7 @@ namespace RS
         {
             if (ON_SHOOT != null)
             {
-                ON_SHOOT(this, EventArgs.Empty);
+                ON_SHOOT(this, new OnShootEventArgs{targetUnit = targetUnit, shootingUnit = unit});
             }
             targetUnit.Damage();
         }

@@ -8,6 +8,8 @@ namespace RS
         private Animator animator;
         private MoveAction moveAction;
         private ShootAction shootAction;
+        [SerializeField] private GameObject bulletProjectilePrefab;
+        [SerializeField] private Transform bulletSpawnPoint;
 
         private void Awake()
         {
@@ -33,9 +35,14 @@ namespace RS
             animator.SetBool("IsWalking", false);
         }
 
-        private void ShootAction_OnShoot(object sender, EventArgs e)
+        private void ShootAction_OnShoot(object sender, ShootAction.OnShootEventArgs e)
         {
-            animator.SetTrigger("Shoot");            
+            animator.SetTrigger("Shoot");
+            GameObject bulletProjectileObject = Instantiate(bulletProjectilePrefab, bulletSpawnPoint.position, Quaternion.identity);
+            BulletProjectile bulletProjectile = bulletProjectileObject.GetComponent<BulletProjectile>();
+            Vector3 targetUnitHitPosition = e.targetUnit.GetWorldPosition();
+            targetUnitHitPosition.y = bulletSpawnPoint.position.y;
+            bulletProjectile.SetUp(targetUnitHitPosition);
         }
     }
 }
