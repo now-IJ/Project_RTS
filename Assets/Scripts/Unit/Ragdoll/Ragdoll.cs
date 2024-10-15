@@ -8,7 +8,7 @@ namespace RS
 
         public void Setup(GameObject originalRootBone)
         {
-            MatchAllChildTransforms(originalRootBone.transform, ragdollRootBone.transform);
+            MatchAllChildTransforms(originalRootBone.transform, ragdollRootBone);
             ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position,10f);
         }
 
@@ -35,8 +35,6 @@ namespace RS
                 {
                     childRigidbody.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
                 }
-                
-                ApplyExplosionToRagdoll(root, explosionForce, explosionPosition, explosionRadius);
             }
         }
     }

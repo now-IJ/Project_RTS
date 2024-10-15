@@ -5,12 +5,12 @@ namespace RS
 {
     public class UnitSelectVisual : MonoBehaviour
     {
-        private Unit _unit;
+        private Unit unit;
         private MeshRenderer meshRenderer;
 
         private void Awake()
         {
-            _unit = GetComponentInParent<Unit>();
+            unit = GetComponentInParent<Unit>();
             meshRenderer = GetComponent<MeshRenderer>();
         }
 
@@ -22,7 +22,7 @@ namespace RS
 
         private void UnitActionSelected_OnSelectedUnitChanged(object sender, EventArgs empty)
         {
-            if (UnitActionSystem.instance.GetSelectedUnit() == _unit)
+            if (UnitActionSystem.instance.GetSelectedUnit() == unit)
             {
                 meshRenderer.enabled = true;
             }
