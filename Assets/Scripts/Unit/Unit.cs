@@ -42,8 +42,9 @@ namespace RS{
             GridPosition newGridPosition = LevelGrid.instance.GetGridPosition(transform.position);
             if (newGridPosition != gridPosition)
             {
-                LevelGrid.instance.UnitMovedGridPosition(this, gridPosition, newGridPosition);
+                GridPosition oldGridPosition = gridPosition;
                 gridPosition = newGridPosition;
+                LevelGrid.instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
             }
         }
 

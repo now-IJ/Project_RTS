@@ -58,12 +58,12 @@ namespace RS
 
         public override void TakeAction(GridPosition gridPosition, Action OnActionComplete)
         {
-            ActionStart(OnActionComplete);
             this.targetPosition = LevelGrid.instance.GetWorldPosition(gridPosition);
             if (ON_START_MOVING != null)
             {
                 ON_START_MOVING(this, EventArgs.Empty);
             }
+            ActionStart(OnActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()

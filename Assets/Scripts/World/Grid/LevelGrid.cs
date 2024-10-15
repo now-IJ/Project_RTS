@@ -6,6 +6,8 @@ namespace RS
 {
     public class LevelGrid : MonoBehaviour
     {
+        public event EventHandler ON_ANY_UNIT_MOVED;
+        
         public static LevelGrid instance { get; private set; }
 
         private GridSystem gridSystem;
@@ -49,6 +51,11 @@ namespace RS
         {
             ClearUnitAtGridPosition(fromGridPosition, unit);
             AddUnitAtGridPosition(toGridPosition, unit);
+
+            if (ON_ANY_UNIT_MOVED != null)
+            {
+                ON_ANY_UNIT_MOVED(this, EventArgs.Empty);
+            }
         }
 
         public GridPosition GetGridPosition(Vector3 worldPosition)

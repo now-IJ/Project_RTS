@@ -19,7 +19,7 @@ namespace RS
             if (Input.GetKeyDown(KeyCode.T))
             {
                 GridSystemVisual.instance.HideAllGridPositions();
-                GridSystemVisual.instance.ShowGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
+                //GridSystemVisual.instance.ShowGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
             }
         }
     }

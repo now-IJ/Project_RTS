@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -11,6 +12,22 @@ namespace RS
         public static GridSystemVisual instance;
 
         [SerializeField] private GameObject gridSystemVisualPrefab;
+        [SerializeField] private List<GridVisualMaterial> gridVisualMaterials = new List<GridVisualMaterial>();
+
+        [Serializable]
+        public struct GridVisualMaterial
+        {
+            public GridVisualColour gridVisualColour;
+            public Material material;
+        }
+        public enum GridVisualColour
+        {
+            White,
+            Blue,
+            Red,
+            Orange,
+            Green,
+        }
 
         private GridSystemVisualSingle[,] gridSystemVisualSinglesArray;
 
@@ -44,12 +61,12 @@ namespace RS
                         gridSystemVisualSingleObject.GetComponent<GridSystemVisualSingle>();
                 }
             }
-        }
 
-        private void Update()
-        {
+            UnitActionSystem.instance.ON_SELECTED_ACTION_CHANGED += UnitActionSystem_OnSelectedActionChanged;
+            LevelGrid.instance.ON_ANY_UNIT_MOVED += LevelGrid_OnAnyUnitMoved;
             UpdateGridVisual();
         }
+
 
         public void HideAllGridPositions()
         {
@@ -59,19 +76,88 @@ namespace RS
             }
         }
 
-        public void ShowGridPositionList(List<GridPosition> gridPositions)
+        private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualColour colour)
+        {
+            List<GridPosition> gridPositions = new List<GridPosition>();
+            for (int x = -range; x <= range; x++)
+            {
+                for (int z = -range; z <= range; z++)
+                { 
+                    GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
+                    
+                    if(!LevelGrid.instance.IsValidGridPosition(testGridPosition))
+                        continue;
+                    
+                    int distance = Mathf.Abs(x) + Mathf.Abs(z);
+                    if(distance > range)
+                       continue;
+                   
+                    gridPositions.Add(testGridPosition);
+                }
+                
+            }
+            
+            ShowGridPositionList(gridPositions, GridVisualColour.Orange);
+        }
+
+        public void ShowGridPositionList(List<GridPosition> gridPositions, GridVisualColour colour)
         {
             foreach (GridPosition gridPosition in gridPositions)
             {
-                gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].Show();
+                gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].Show(GetGridVisualColourMaterial(colour));
             }
         }
 
         private void UpdateGridVisual()
         {
             HideAllGridPositions();
+
+            Unit selectedUnit = UnitActionSystem.instance.GetSelectedUnit();
             BaseAction selectedAction = UnitActionSystem.instance.GetSelecetedAction();
-            ShowGridPositionList(selectedAction.GetValidActionGridPositionList());
+
+            GridVisualColour gridVisualColour;
+            switch (selectedAction)
+            {
+                case MoveAction moveAction:
+                    gridVisualColour = GridVisualColour.Green;
+                    break;
+                case ShootAction shootAction:
+                    gridVisualColour = GridVisualColour.Red;
+                    ShowGridPositionRange(selectedUnit.GetGridPosition(), shootAction.GetMaxShootDistance(), GridVisualColour.Orange);
+                    break;
+                case SpinAction spinAction:
+                    gridVisualColour = GridVisualColour.Blue;
+                    break;
+                default:
+                    gridVisualColour = GridVisualColour.White;
+                    break;
+            }
+            
+            ShowGridPositionList(selectedAction.GetValidActionGridPositionList(), gridVisualColour);
+        }
+        
+        
+        private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
+        {
+            UpdateGridVisual();   
+        }
+        
+        
+        private void LevelGrid_OnAnyUnitMoved(object sender, EventArgs e)
+        {
+            UpdateGridVisual();  
+        }
+
+        private Material GetGridVisualColourMaterial(GridVisualColour colour)
+        {
+            foreach (GridVisualMaterial materialColour in gridVisualMaterials)
+            {
+                if (materialColour.gridVisualColour == colour)
+                {
+                    return materialColour.material;
+                }
+            }
+            return null;
         }
     }
 }

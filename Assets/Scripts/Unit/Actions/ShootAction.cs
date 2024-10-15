@@ -100,14 +100,14 @@ namespace RS
 
         public override void TakeAction(GridPosition gridPosition, Action OnActionComplete)
         {
-            ActionStart(OnActionComplete);
-
             targetUnit = LevelGrid.instance.GetUnitOnGridPosition(gridPosition);
 
             canShootBullet = true;
             state =  State.Aiming;
             float aimingStateTime = 1;
             stateTimer = aimingStateTime;
+            
+            ActionStart(OnActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
@@ -153,6 +153,16 @@ namespace RS
             }
 
             return validGridPositionList;
+        }
+
+        public Unit GetTargetUnit()
+        {
+            return targetUnit;
+        }
+
+        public int GetMaxShootDistance()
+        {
+            return maxShootDistance;
         }
     }
 }

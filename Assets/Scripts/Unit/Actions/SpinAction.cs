@@ -24,8 +24,8 @@ namespace RS
 
         public override void TakeAction(GridPosition gridPosition, Action OnActionComplete)
         {
-            ActionStart(base.OnActionComplete);
             totalSpin = 0;
+            ActionStart(base.OnActionComplete);
         }
 
         public override string GetActionName()
