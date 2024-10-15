@@ -21,7 +21,8 @@ namespace RS
             public Unit shootingUnit;
         }
         
-        private int maxShootDistance = 7;
+        [SerializeField] private int maxShootDistance = 7;
+        [SerializeField] private int shootDamage = 40;
         private State state;
         private float stateTimer;
         private Unit targetUnit;
@@ -89,7 +90,7 @@ namespace RS
             {
                 ON_SHOOT(this, new OnShootEventArgs{targetUnit = targetUnit, shootingUnit = unit});
             }
-            targetUnit.Damage();
+            targetUnit.Damage(shootDamage);
         }
         
         public override string GetActionName()

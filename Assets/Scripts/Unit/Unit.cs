@@ -15,6 +15,7 @@ namespace RS{
         [SerializeField] private bool isEnemy;
 
         private int actionPoints;
+        private UnitHealthSystem healthSystem;
         private BaseAction[] baseActionArray;
         private MoveAction moveAction;
         private SpinAction spinAction;
@@ -22,6 +23,7 @@ namespace RS{
         private void Awake()
         {
             actionPoints = actionPointsMax;
+            healthSystem = GetComponent<UnitHealthSystem>();
             moveAction = GetComponent<MoveAction>();
             spinAction = GetComponent<SpinAction>();
             baseActionArray = GetComponents<BaseAction>();
@@ -30,6 +32,7 @@ namespace RS{
         private void Start()
         {
             TurnSystem.instance.ON_TURN_CHANGED += TurnSystem_OnTurnChanged;
+            healthSystem.ON_UNIT_DEATH += HealthSystem_OnUnitDeath;
             gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
             LevelGrid.instance.AddUnitAtGridPosition(gridPosition, this);
         }
@@ -118,9 +121,15 @@ namespace RS{
             return isEnemy;
         }
 
-        public void Damage()
+        public void Damage(int damageAmount)
         {
-            Debug.Log(transform + " damaged!");
+            healthSystem.TakeDamage(damageAmount);
+        }
+        
+        private void HealthSystem_OnUnitDeath(object sender, EventArgs e)
+        {
+            LevelGrid.instance.ClearUnitAtGridPosition(gridPosition, this);
+            Destroy(gameObject);
         }
     }
 }

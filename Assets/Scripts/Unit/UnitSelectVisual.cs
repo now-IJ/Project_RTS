@@ -31,5 +31,10 @@ namespace RS
                 meshRenderer.enabled = false;
             }
         }
+
+        private void OnDestroy()
+        {
+            UnitActionSystem.instance.ON_SELECTED_UNIT_CHANGED -= UnitActionSelected_OnSelectedUnitChanged;
+        }
     }
 }
