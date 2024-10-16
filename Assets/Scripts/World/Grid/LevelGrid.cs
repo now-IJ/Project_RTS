@@ -12,7 +12,6 @@ namespace RS
 
         private GridSystem<GridObject> gridSystem;
 
-        [SerializeField] private GameObject gridDebugGameObjectPrefab;
         [SerializeField] private int width = 10;
         [SerializeField] private int height = 10;
         [SerializeField] private float cellSize = 2f;
@@ -30,7 +29,6 @@ namespace RS
             }
 
             gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
-            // gridSystem.CreateDebugObjects(gridDebugGameObjectPrefab);
         }
 
         private void Start()

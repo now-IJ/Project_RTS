@@ -30,7 +30,6 @@ namespace RS
             {
                 Destroy(gameObject);
             }
-            gridSystem.CreateDebugObjects(gridDebugGameObjectPrefab);
         }
 
         public void Setup(int width, int height, float cellSize)

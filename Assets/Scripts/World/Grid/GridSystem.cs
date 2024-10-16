@@ -40,22 +40,6 @@ namespace RS{
                 Mathf.RoundToInt(worldPosition.z / cellSize));
         }
 
-        public void CreateDebugObjects(GameObject debugPrefab)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                for (int z = 0; z < height; z++)
-                {
-                    GridPosition gridPosition = new GridPosition(x, z);
-
-                    GameObject debugGameObject = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition),
-                        Quaternion.identity);
-                    GridDebugObject gridDebugObject = debugGameObject.GetComponent<GridDebugObject>();
-                    gridDebugObject.SetGridObject(GetGridObject(gridPosition));
-                }
-            }
-        }
-
         public TGridObject GetGridObject(GridPosition gridPosition)
         {
             return gridObjectArray[gridPosition.x, gridPosition.z];
