@@ -8,8 +8,9 @@ namespace RS
 
         public void Setup(GameObject originalRootBone)
         {
+            Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
             MatchAllChildTransforms(originalRootBone.transform, ragdollRootBone);
-            ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position,10f);
+            ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position + randomDirection,10f);
         }
 
         private void MatchAllChildTransforms(Transform root, Transform clone)

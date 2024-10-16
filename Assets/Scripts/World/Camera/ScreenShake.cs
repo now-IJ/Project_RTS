@@ -25,7 +25,7 @@ namespace RS
 
         public void Shake(float intensity = 1f)
         {
-                cinemachineImpulseSource.GenerateImpulse(intensity);  
+            cinemachineImpulseSource.GenerateImpulse(intensity);  
         }
     }
 }
