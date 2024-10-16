@@ -24,7 +24,7 @@ namespace RS
 
         private void Update()
         {
-            debugGridPositionText.SetText(gridObject.ToString());
+            //debugGridPositionText.SetText(gridObject.ToString());
         }
     }
 }
