@@ -112,9 +112,13 @@ namespace RS
 
         public override List<GridPosition> GetValidActionGridPositionList()
         {
-            List<GridPosition> validGridPositionList = new List<GridPosition>();
+            GridPosition gridPosition = unit.GetGridPosition();
+            return GetValidActionGridPositionList(gridPosition);
+        }
 
-            GridPosition unitGridPosition = unit.GetGridPosition();
+        public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
+        {
+            List<GridPosition> validGridPositionList = new List<GridPosition>();
 
             for (int x = -maxShootDistance; x <= maxShootDistance; x++)
             {
@@ -155,6 +159,17 @@ namespace RS
             return validGridPositionList;
         }
 
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            Unit targetUnit = LevelGrid.instance.GetUnitOnGridPosition(gridPosition);
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100f),
+            };
+        
+        }
+
         public Unit GetTargetUnit()
         {
             return targetUnit;
@@ -163,6 +178,11 @@ namespace RS
         public int GetMaxShootDistance()
         {
             return maxShootDistance;
+        }
+
+        public int GetTargetCountAtPosition(GridPosition gridPosition)
+        {
+            return GetValidActionGridPositionList(gridPosition).Count;
         }
     }
 }

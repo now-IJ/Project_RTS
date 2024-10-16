@@ -11,6 +11,8 @@ namespace RS{
         [SerializeField] private int actionPointsMax = 2;
 
         public static event EventHandler ON_ANY_ACTION_POINTS_CHANGED;
+        public static event EventHandler ON_ANY_UNIT_SPAWNED;
+        public static event EventHandler ON_ANY_UNIT_DEAD;
 
         [SerializeField] private bool isEnemy;
 
@@ -19,6 +21,7 @@ namespace RS{
         private BaseAction[] baseActionArray;
         private MoveAction moveAction;
         private SpinAction spinAction;
+        private ShootAction shootAction;
 
         private void Awake()
         {
@@ -26,6 +29,7 @@ namespace RS{
             healthSystem = GetComponent<UnitHealthSystem>();
             moveAction = GetComponent<MoveAction>();
             spinAction = GetComponent<SpinAction>();
+            shootAction = GetComponent<ShootAction>();
             baseActionArray = GetComponents<BaseAction>();
         }
 
@@ -35,6 +39,11 @@ namespace RS{
             healthSystem.ON_UNIT_DEATH += HealthSystem_OnUnitDeath;
             gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
             LevelGrid.instance.AddUnitAtGridPosition(gridPosition, this);
+
+            if (ON_ANY_UNIT_SPAWNED != null)
+            {
+                ON_ANY_UNIT_SPAWNED(this, EventArgs.Empty);
+            }
         }
 
         private void Update()
@@ -50,7 +59,7 @@ namespace RS{
 
         private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
         {
-            if ((IsEnemy() && !TurnSystem.instance.IsPLayerTurn()) || (!IsEnemy() && TurnSystem.instance.IsPLayerTurn()))
+            if ((IsEnemy() && !TurnSystem.instance.IsPlayerTurn()) || (!IsEnemy() && TurnSystem.instance.IsPlayerTurn()))
             {
                 actionPoints = actionPointsMax;
 
@@ -74,6 +83,11 @@ namespace RS{
         public SpinAction GetSpinAction()
         {
             return spinAction;
+        }
+
+        public ShootAction GetShootAction()
+        {
+            return shootAction;
         }
 
         public GridPosition GetGridPosition()
@@ -129,8 +143,17 @@ namespace RS{
         
         private void HealthSystem_OnUnitDeath(object sender, EventArgs e)
         {
+            if (ON_ANY_UNIT_DEAD != null)
+            {
+                ON_ANY_UNIT_DEAD(this, EventArgs.Empty);
+            }
             LevelGrid.instance.ClearUnitAtGridPosition(gridPosition, this);
             Destroy(gameObject);
+        }
+
+        public float GetHealthNormalized()
+        {
+            return healthSystem.GetHealthNormalized();
         }
     }
 }

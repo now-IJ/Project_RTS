@@ -25,7 +25,7 @@ namespace RS
         public override void TakeAction(GridPosition gridPosition, Action OnActionComplete)
         {
             totalSpin = 0;
-            ActionStart(base.OnActionComplete);
+            ActionStart(OnActionComplete);
         }
 
         public override string GetActionName()
@@ -39,6 +39,15 @@ namespace RS
 
             GridPosition unitGridPosition = unit.GetGridPosition();
             return new List<GridPosition> { unitGridPosition };
+        }
+
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = 0,
+            };
         }
 
         public override int GetActionPointsCost()

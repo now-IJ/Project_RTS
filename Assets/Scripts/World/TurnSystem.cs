@@ -40,7 +40,7 @@ namespace RS
             return turnNumber;
         }
 
-        public bool IsPLayerTurn()
+        public bool IsPlayerTurn()
         {
             return isPlayerTurn;
         }

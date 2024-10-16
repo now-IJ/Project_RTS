@@ -37,12 +37,12 @@ namespace RS
 
         private void UpdateEnemyTurnBanner()
         {
-            enemyTurnBanner.SetActive(!TurnSystem.instance.IsPLayerTurn());
+            enemyTurnBanner.SetActive(!TurnSystem.instance.IsPlayerTurn());
         }
 
         private void UpdateNextTurnButtonVisibility()
         {
-            nextTurnButton.gameObject.SetActive(TurnSystem.instance.IsPLayerTurn());
+            nextTurnButton.gameObject.SetActive(TurnSystem.instance.IsPlayerTurn());
         }
     }
 }

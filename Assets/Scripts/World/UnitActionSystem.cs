@@ -45,7 +45,7 @@ namespace RS
                 return;
             }
 
-            if (!TurnSystem.instance.IsPLayerTurn())
+            if (!TurnSystem.instance.IsPlayerTurn())
             {
                 return;
             }

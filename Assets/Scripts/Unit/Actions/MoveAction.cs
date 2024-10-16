@@ -101,6 +101,16 @@ namespace RS
             return validGridPositionList;
         }
 
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            int targetCountAtPosition = unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = targetCountAtPosition * 10,
+            };
+        }
+
         public override string GetActionName()
         {
             return "Move";
