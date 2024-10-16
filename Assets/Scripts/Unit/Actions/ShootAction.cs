@@ -14,6 +14,7 @@ namespace RS
         }
 
         public event EventHandler<OnShootEventArgs> ON_SHOOT;
+        public static event EventHandler<OnShootEventArgs> ON_ANY_SHOOT;
 
         public class OnShootEventArgs : EventArgs
         {
@@ -90,6 +91,11 @@ namespace RS
             if (ON_SHOOT != null)
             {
                 ON_SHOOT(this, new OnShootEventArgs{targetUnit = targetUnit, shootingUnit = unit});
+            }
+
+            if (ON_ANY_SHOOT != null)
+            {
+                ON_ANY_SHOOT(this, new OnShootEventArgs { targetUnit = targetUnit, shootingUnit = unit });
             }
             targetUnit.Damage(shootDamage);
         }
