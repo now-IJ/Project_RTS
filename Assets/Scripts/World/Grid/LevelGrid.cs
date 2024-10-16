@@ -10,7 +10,7 @@ namespace RS
         
         public static LevelGrid instance { get; private set; }
 
-        private GridSystem gridSystem;
+        private GridSystem<GridObject> gridSystem;
 
         [SerializeField] private GameObject gridDebugGameObjectPrefab;
 
@@ -26,7 +26,7 @@ namespace RS
                 Destroy(gameObject);
             }
 
-            gridSystem = new GridSystem(10, 10, 2f);
+            gridSystem = new GridSystem<GridObject>(10, 10, 2f, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
             gridSystem.CreateDebugObjects(gridDebugGameObjectPrefab);
         }
 

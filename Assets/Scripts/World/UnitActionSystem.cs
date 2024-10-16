@@ -137,7 +137,7 @@ namespace RS
         private void SetSelectedUnit(Unit clickedOnUnit)
         {
             selectedUnit = clickedOnUnit;
-            SetSelectedAction(selectedUnit.GetMoveAction());
+            SetSelectedAction(selectedUnit.GetAction<MoveAction>());
 
             if (ON_SELECTED_UNIT_CHANGED != null)
             {
