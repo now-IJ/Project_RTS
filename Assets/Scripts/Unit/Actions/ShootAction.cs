@@ -23,6 +23,7 @@ namespace RS
         
         [SerializeField] private int maxShootDistance = 7;
         [SerializeField] private int shootDamage = 40;
+        [SerializeField] private LayerMask obstacleLayerMask;
         private State state;
         private float stateTimer;
         private Unit targetUnit;
@@ -137,19 +138,30 @@ namespace RS
                     {
                         continue;
                     }
-                    
 
                     if (!LevelGrid.instance.HasUnitOnGridPosition(testGridPosition))
                     {
                         // Grid Position is empty
                         continue;
                     }
-
+                    
                     Unit targetUnit = LevelGrid.instance.GetUnitOnGridPosition(testGridPosition);
-
                     if (targetUnit.IsEnemy() == unit.IsEnemy())
                     {
-                            continue;
+                        continue;
+                    }
+                    
+                    float unitShoulderHeigth = 1.5f;
+                    Vector3 unitWorldPosition = LevelGrid.instance.GetWorldPosition(unitGridPosition);
+                    Vector3 shootDirection = targetUnit.GetWorldPosition() - unitWorldPosition;
+                    shootDirection.Normalize();
+                    if (Physics.Raycast(
+                            unitWorldPosition + Vector3.up * unitShoulderHeigth,
+                            shootDirection,
+                            Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                            obstacleLayerMask))
+                    {
+                        continue;
                     }
                     
                     validGridPositionList.Add(testGridPosition);

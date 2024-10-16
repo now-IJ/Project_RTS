@@ -19,14 +19,7 @@ namespace RS
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetMouseHitPosition());
-                GridPosition startGridPosition = new GridPosition(0, 0);
-                List<GridPosition> gridPositions = Pathfinding.instance.FindPath(startGridPosition, mouseGridPosition);
-
-                for (int i = 0; i < gridPositions.Count - 1; i++)
-                {
-                    Debug.DrawLine(LevelGrid.instance.GetWorldPosition(gridPositions[i]), LevelGrid.instance.GetWorldPosition(gridPositions[i+1]), Color.white, 10f);
-                }
+               
             }
         }
     }

@@ -57,7 +57,7 @@ namespace RS
             }
         }
 
-        public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+        public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition, out int pathLength)
         {
             List<PathNode> openList = new List<PathNode>();
             List<PathNode> closedList = new List<PathNode>();
@@ -90,6 +90,7 @@ namespace RS
 
                 if (currentNode == endNode)
                 {
+                    pathLength = endNode.GetFCost();
                     return CalculatePath(endNode);
                 }
 
@@ -123,6 +124,7 @@ namespace RS
                 }
             }
             // NO PATH FOUND
+            pathLength = 0;
             return null;
         }
 
@@ -232,6 +234,22 @@ namespace RS
             }
 
             return gridPositions;
+        }
+
+        public bool IsWalkableGridPosition(GridPosition gridPosition)
+        {
+            return gridSystem.GetGridObject(gridPosition).GetIsWalkable();
+        }
+
+        public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition)
+        {
+            return FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
+        }
+
+        public int GetPathLength(GridPosition startGridPosition, GridPosition endGridPosition)
+        {
+            FindPath(startGridPosition, endGridPosition, out int pathLength);
+            return pathLength;
         }
     }
 }

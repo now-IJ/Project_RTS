@@ -7,7 +7,8 @@ namespace RS
 {
     public class MoveAction : BaseAction
     {
-        private Vector3 targetPosition;
+        private List<Vector3> targetPositionList;
+        private int currentPositionIndex;
 
         public event EventHandler ON_START_MOVING; 
         public event EventHandler ON_STOP_MOVING; 
@@ -19,12 +20,6 @@ namespace RS
         [SerializeField] private float reachTargetAcceptance = 0.1f;
         [SerializeField] private int maxMoveDistance = 4;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            targetPosition = transform.position;
-        }
-
         private void Update()
         {
             if (isActive)
@@ -35,9 +30,10 @@ namespace RS
 
         public void HandleMovement()
         {
-
+            Vector3 targetPosition = targetPositionList[currentPositionIndex];
             float distanceToTargetPosition = Vector3.Distance(transform.position, targetPosition);
             Vector3 moveDirection = targetPosition - transform.position;
+            transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
 
             if (distanceToTargetPosition >= reachTargetAcceptance)
             {
@@ -46,19 +42,31 @@ namespace RS
             }
             else
             {
-                if (ON_STOP_MOVING != null)
+                currentPositionIndex++;
+                if (currentPositionIndex >= targetPositionList.Count)
                 {
-                    ON_STOP_MOVING(this, EventArgs.Empty);
-                }
-                ActionComplete();
-            }
+                    if (ON_STOP_MOVING != null)
+                    {
+                        ON_STOP_MOVING(this, EventArgs.Empty);
+                    }
 
-            transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
+                    ActionComplete();
+                }
+            }
         }
 
         public override void TakeAction(GridPosition gridPosition, Action OnActionComplete)
         {
-            this.targetPosition = LevelGrid.instance.GetWorldPosition(gridPosition);
+            List<GridPosition> pathGridPositions = Pathfinding.instance.FindPath(unit.GetGridPosition(), gridPosition, out int pathLength);
+            
+            currentPositionIndex = 0;
+            targetPositionList = new List<Vector3>();
+
+            foreach (GridPosition pathGridPosition in pathGridPositions)
+            {
+                targetPositionList.Add(LevelGrid.instance.GetWorldPosition(pathGridPosition));
+            }
+            
             if (ON_START_MOVING != null)
             {
                 ON_START_MOVING(this, EventArgs.Empty);
@@ -90,6 +98,22 @@ namespace RS
                     }
 
                     if (LevelGrid.instance.HasUnitOnGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    if (!Pathfinding.instance.IsWalkableGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    if (!Pathfinding.instance.HasPath(unit.GetGridPosition(), testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    int pathfindingDistanceMultiplier = 10;
+                    if (Pathfinding.instance.GetPathLength(unit.GetGridPosition(), testGridPosition) > maxMoveDistance * pathfindingDistanceMultiplier)
                     {
                         continue;
                     }
