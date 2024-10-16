@@ -18,13 +18,12 @@ namespace RS
         public virtual void SetGridObject(object gridObject)
         {
             this.gridObject = gridObject;
-
-
+            
         }
 
         protected virtual void Update()
         {
-            debugGridPositionText.SetText(gridObject.ToString());
+            //debugGridPositionText.SetText(gridObject.ToString());
         }
     }
 }
