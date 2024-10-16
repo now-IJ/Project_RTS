@@ -28,7 +28,6 @@ namespace RS
 
         private void Update()
         {
-            Debug.Log(state);
             if (TurnSystem.instance.IsPlayerTurn())
             {
                 return;

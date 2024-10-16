@@ -13,6 +13,9 @@ namespace RS
         private GridSystem<GridObject> gridSystem;
 
         [SerializeField] private GameObject gridDebugGameObjectPrefab;
+        [SerializeField] private int width = 10;
+        [SerializeField] private int height = 10;
+        [SerializeField] private float cellSize = 2f;
 
 
         private void Awake()
@@ -26,8 +29,13 @@ namespace RS
                 Destroy(gameObject);
             }
 
-            gridSystem = new GridSystem<GridObject>(10, 10, 2f, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+            gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
             // gridSystem.CreateDebugObjects(gridDebugGameObjectPrefab);
+        }
+
+        private void Start()
+        {
+            Pathfinding.instance.Setup(width, height, cellSize);
         }
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)

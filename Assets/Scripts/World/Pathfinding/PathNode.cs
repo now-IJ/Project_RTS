@@ -9,6 +9,7 @@ namespace RS
         private int hCost;
         private int fCost;
         private PathNode cameFromPathNode;
+        private bool isWalkable = true;
         
         public PathNode(GridPosition gridPosition)
         {
@@ -68,6 +69,16 @@ namespace RS
         public GridPosition GetGridPosition()
         {
             return gridPosition;
+        }
+
+        public bool GetIsWalkable()
+        {
+            return isWalkable;
+        }
+
+        public void SetIsWalkable(bool isWalkable)
+        {
+            this.isWalkable = isWalkable;
         }
     }
 }
