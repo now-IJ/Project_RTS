@@ -19,5 +19,20 @@ namespace RS
         {
             return gridPosition.ToString();
         }
+
+        public int GetGCost()
+        {
+            return gCost;
+        }
+        
+        public int GetHCost()
+        {
+            return hCost;
+        }
+        
+        public int GetFCost()
+        {
+            return fCost;
+        }
     }
 }

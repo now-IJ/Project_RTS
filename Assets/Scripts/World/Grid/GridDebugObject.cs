@@ -6,25 +6,25 @@ namespace RS
 {
     public class GridDebugObject : MonoBehaviour
     {
-        private GridObject gridObject;
+        private object gridObject;
 
-        private TextMeshPro debugGridPositionText;
+        [SerializeField] private TextMeshPro debugGridPositionText;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             debugGridPositionText = GetComponentInChildren<TextMeshPro>();
         }
 
-        public void SetGridObject(GridObject gridObject)
+        public virtual void SetGridObject(object gridObject)
         {
             this.gridObject = gridObject;
 
 
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            //debugGridPositionText.SetText(gridObject.ToString());
+            debugGridPositionText.SetText(gridObject.ToString());
         }
     }
 }

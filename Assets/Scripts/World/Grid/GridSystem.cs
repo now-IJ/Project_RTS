@@ -51,7 +51,7 @@ namespace RS{
                     GameObject debugGameObject = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition),
                         Quaternion.identity);
                     GridDebugObject gridDebugObject = debugGameObject.GetComponent<GridDebugObject>();
-                    gridDebugObject.SetGridObject(GetGridObject(gridPosition) as GridObject);
+                    gridDebugObject.SetGridObject(GetGridObject(gridPosition));
                 }
             }
         }
