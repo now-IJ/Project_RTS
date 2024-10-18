@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RS
 {
@@ -7,6 +8,8 @@ namespace RS
     {
         public static InputManager instance;
 
+        private PlayerInputs playerInputs;
+        
         private void Awake()
         {
             if (instance == null)
@@ -17,74 +20,38 @@ namespace RS
             {
                 Destroy(gameObject);
             }
+
+            playerInputs = new PlayerInputs();
+        }
+
+        private void Start()
+        {
+            playerInputs.Enable();
         }
 
         public Vector2 GetMouseScreenPosition()
         {
-            return Input.mousePosition;
+            return Mouse.current.position.ReadValue();
         }
 
         public bool IsMouseButtonDown()
         {
-            return Input.GetMouseButtonDown(0);
+            return playerInputs.Player.Interact.WasPressedThisFrame();
         }
 
         public Vector2 GetCameraMoveVector()
         {
-            Vector2 inputMoveDirection = Vector2.zero;
-            if (Input.GetKey(KeyCode.W))
-            {
-                inputMoveDirection.y = 1f;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                inputMoveDirection.x = -1f;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                inputMoveDirection.y = -1f;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                inputMoveDirection.x = 1f;
-            }
-
-            return inputMoveDirection;
+            return playerInputs.Camera.Movement.ReadValue<Vector2>();
         }
 
         public float GetCameraRotateAmount()
         {
-            float rotateAmount = 0.0f;
-            if (Input.GetKey(KeyCode.Q))
-            {
-                rotateAmount = 1f;
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                rotateAmount = -1f;
-            }
-
-            return rotateAmount;
+            return playerInputs.Camera.Rotate.ReadValue<float>();
         }
         
         public float GetCameraZoomAmount()
         {
-            float zoomAmount = 0.0f;
-            
-            if (Input.mouseScrollDelta.y > 0)
-            {
-                zoomAmount = -1f;
-            }
-
-            if (Input.mouseScrollDelta.y < 0)
-            {
-                zoomAmount = +1f;
-            }
-
-            return zoomAmount;
+            return playerInputs.Camera.Zoom.ReadValue<float>();
         }
     }
 }

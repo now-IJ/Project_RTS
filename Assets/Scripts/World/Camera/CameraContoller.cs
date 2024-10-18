@@ -56,7 +56,7 @@ namespace RS
 
         private void HandleCameraZoom()
         {
-            targetFollowOffset.y += InputManager.instance.GetCameraZoomAmount();
+            targetFollowOffset.y -= InputManager.instance.GetCameraZoomAmount();
 
             targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, minZoom, maxZoom);
             cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset,
