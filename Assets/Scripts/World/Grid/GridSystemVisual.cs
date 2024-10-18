@@ -155,6 +155,9 @@ namespace RS
                     gridVisualColour = GridVisualColour.Red;
                     ShowGridPositionRangeSquare(selectedUnit.GetGridPosition(), swordAction.GetMaxSlashDistance(), GridVisualColour.Orange);
                     break;
+                case InteractAction interactAction:
+                    gridVisualColour = GridVisualColour.Blue;
+                    break;
                 default:
                     gridVisualColour = GridVisualColour.White;
                     break;

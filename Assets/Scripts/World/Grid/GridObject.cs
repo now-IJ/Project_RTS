@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 namespace RS
 {
@@ -8,6 +9,7 @@ namespace RS
       private GridSystem<GridObject> gridSystem;
       private GridPosition gridPosition;
       private List<Unit> unitList;
+      private IInteractable interactable;
 
       public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
       {
@@ -56,6 +58,16 @@ namespace RS
          }
 
          return null;
+      }
+
+      public IInteractable GetInteractable()
+      {
+         return interactable;
+      }
+
+      public void SetInteractable(IInteractable interactable)
+      {
+         this.interactable = interactable;
       }
    }
 }

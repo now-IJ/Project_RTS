@@ -8,6 +8,7 @@ namespace RS{
         private int width;
         private int height;
         private float cellSize;
+        private bool isValdGridPosition = true;
         private TGridObject[,] gridObjectArray;
 
         public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
@@ -57,7 +58,13 @@ namespace RS{
 
         public bool isValidGridPosition(GridPosition gridPosition)
         {
-            return gridPosition.x >= 0 && gridPosition.z >= 0 && gridPosition.x < width && gridPosition.z < height;
+            bool insideOfGrid = gridPosition.x >= 0 && gridPosition.z >= 0 && gridPosition.x < width && gridPosition.z < height;
+            return insideOfGrid && isValdGridPosition;
+        }
+
+        public void setValidGridPosition(GridPosition gridPosition, bool isValid)
+        {
+            isValdGridPosition = isValid;
         }
     }
 }
