@@ -25,7 +25,7 @@ namespace RS
         public static Vector3 GetMouseHitPosition()
         {
             RaycastHit hit;
-            Ray cameraHitRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray cameraHitRay = Camera.main.ScreenPointToRay(InputManager.instance.GetMouseScreenPosition());
             Physics.Raycast(cameraHitRay, out hit, float.MaxValue, instance.mouseHitLayer);
             return hit.point;
         }

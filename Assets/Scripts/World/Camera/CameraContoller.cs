@@ -39,28 +39,9 @@ namespace RS
 
         private void HandleCameraMovement()
         {
-            Vector3 inputMoveDirection = Vector3.zero;
-            if (Input.GetKey(KeyCode.W))
-            {
-                inputMoveDirection.z = 1f;
-            }
+            Vector2 inputMoveDirection = InputManager.instance.GetCameraMoveVector();
 
-            if (Input.GetKey(KeyCode.A))
-            {
-                inputMoveDirection.x = -1f;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                inputMoveDirection.z = -1f;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                inputMoveDirection.x = 1f;
-            }
-
-            Vector3 moveDireciton = transform.forward * inputMoveDirection.z + transform.right * inputMoveDirection.x;
+            Vector3 moveDireciton = transform.forward * inputMoveDirection.y + transform.right * inputMoveDirection.x;
             transform.position += moveDireciton * cameraMoveSpeed * Time.deltaTime;
         }
 
@@ -68,32 +49,14 @@ namespace RS
         {
             Vector3 inputRotateVector = Vector3.zero;
 
-            if (Input.GetKey(KeyCode.Q))
-            {
-                inputRotateVector.y = 1;
-            }
-
-            if (Input.GetKey(KeyCode.E))
-            {
-                inputRotateVector.y = -1;
-            }
-
+            inputRotateVector.y = InputManager.instance.GetCameraRotateAmount();
+          
             transform.eulerAngles += inputRotateVector * cameraRotationSpeed * Time.deltaTime;
         }
 
         private void HandleCameraZoom()
         {
-            float zoomAmount = 1f;
-
-            if (Input.mouseScrollDelta.y > 0)
-            {
-                targetFollowOffset.y -= zoomAmount;
-            }
-
-            if (Input.mouseScrollDelta.y < 0)
-            {
-                targetFollowOffset.y += zoomAmount;
-            }
+            targetFollowOffset.y += InputManager.instance.GetCameraZoomAmount();
 
             targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, minZoom, maxZoom);
             cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset,

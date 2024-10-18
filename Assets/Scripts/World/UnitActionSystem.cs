@@ -66,7 +66,7 @@ namespace RS
 
         private void HandleSelectedAction()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (InputManager.instance.IsMouseButtonDown())
             {
                 GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetMouseHitPosition());
 
@@ -105,10 +105,10 @@ namespace RS
 
         private bool TryHandleUnitSelection()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (InputManager.instance.IsMouseButtonDown())
             {
                 RaycastHit hit;
-                Ray cameraHitRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray cameraHitRay = Camera.main.ScreenPointToRay(InputManager.instance.GetMouseScreenPosition());
                 if (Physics.Raycast(cameraHitRay, out hit, float.MaxValue, unitsLayer))
                 {
                     if (hit.collider.gameObject.TryGetComponent<Unit>(out Unit clickedOnUnit))
