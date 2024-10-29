@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-
-namespace RS{
+namespace RS
+{
     public class GridSystem<TGridObject>
     {
         private int width;
@@ -60,11 +60,6 @@ namespace RS{
         {
             bool insideOfGrid = gridPosition.x >= 0 && gridPosition.z >= 0 && gridPosition.x < width && gridPosition.z < height;
             return insideOfGrid && isValdGridPosition;
-        }
-
-        public void setValidGridPosition(GridPosition gridPosition, bool isValid)
-        {
-            isValdGridPosition = isValid;
         }
     }
 }

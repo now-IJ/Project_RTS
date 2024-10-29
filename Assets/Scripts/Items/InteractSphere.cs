@@ -20,8 +20,8 @@ namespace RS
         private void Start()
         {
             gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
-            LevelGrid.instance.SetInteractableAtGridPosition(gridPosition, this);
             Pathfinding.instance.SetIsWalkableGridPosition(gridPosition,false);
+            LevelGrid.instance.SetInteractableAtGridPosition(gridPosition, this);
             meshRenderer = GetComponentInChildren<MeshRenderer>();
             turnedOn = false;
             TurnOff();
